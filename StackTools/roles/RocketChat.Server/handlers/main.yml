@@ -18,3 +18,7 @@
 
   - name: Restart the Rocket.Chat service
     service: name=rocketchat state=restarted
+
+  - name: Unpack the latest Rocket.Chat tarball
+    shell: "{{ rocket_chat_unpack_latest_tarball }}"
+    when: rocket_chat_unpack_latest_tarball is defined
