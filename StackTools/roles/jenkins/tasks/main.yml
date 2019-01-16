@@ -1,11 +1,10 @@
 --- #Tasks file for jenkins/tasks/main.yml
-- name: Install yum
+- name: Install Java OpenJDK
   yum: 
    name: 
-    - wget
     - java-1.8.0-openjdk
 
-- name: Download jenkins.repo
+- name: Download Jenkins Repo
   get_url:
    url: http://pkg.jenkins-ci.org
    dest: /etc/yum.repos.d/jenkins.repo
@@ -25,20 +24,3 @@
    name: jenkins
    state: started
    enabled: true
-
-- name: Sleep for 30 seconds and continue with play
-  wait_for: timeout=30
-
-- name: Get init password Jenkins
-  shell: mkdir /var/lib/jenkins/secrets/
-  args:
-    chdir: /var/lib/jenkins/secrets/ 
-    creates: initialAdminPassword
-  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
-  changed_when: false
-  register: result
-  debugger: on_failed
-
-- name: Print init password Jenkins
-  debug:
-   var: result.stdout
