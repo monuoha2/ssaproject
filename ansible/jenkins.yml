@@ -16,28 +16,9 @@
         dest: /etc/yum.repos.d/jenkins.repo
 
     - name: Download and install Jenkins Repo Key
-    #  command: rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key warn=false
       rpm_key: 
         state: present
         key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
-
-    # ==================================================================
-    # This is another way to download and install the Jenkins Repo GPG Key
-    # The purpose for doing it in 2 steps (downloading the key first, then
-    # installing with the "gpg --import" command is to avoid the warning
-    # suggestion that comes up when the playbook is running to use "yum" 
-    # instead of "rpm". At this point, it's not installing the key when
-    # using "gpg --import" so I need to research and figure out why...
-
-    #- name: Download Jenkins Repo GPG Key
-    #  get_url:
-    #    url: https://jenkins-ci.org/redhat/jenkins-ci.org.key
-    #    dest: /home/vagrant/jenkins-ci.org.key
-
-    #- name: Install Jenkins Repo GPG Key
-    #  command: gpg --import /home/vagrant/jenkins-ci.org.key
-
-    # ==================================================================
 
     - name: Install Java 1.8.0 JDK
       action: yum name=java-1.8.0-openjdk state=installed
