@@ -30,4 +30,4 @@
       action: yum name=jenkins state=installed
 
     - name: Start and Enable Jenkins
-      action: systemd name=jenkins state=started enabled=yes
+      action: systemd name=jenkins state=restarted enabled=yes
