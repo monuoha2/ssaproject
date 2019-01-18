@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-	config.vm.box = "centos/7"
+	config.vm.box = "bento/centos-7.6"
 	config.vm.define "jenkins" do |jenkins|
 		jenkins.vm.hostname = "jenkins.ssaproject.com"
 		jenkins.vm.network "private_network",ip:"1.2.3.4"
