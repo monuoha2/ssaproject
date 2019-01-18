@@ -68,7 +68,7 @@
       systemd: name=mongod state=started enabled=yes
 
     - name: Start and Enable Rocket.Chat
-      systemd: name=rocketchat state=started enabled=yes
+      systemd: name=rocketchat state=restarted enabled=yes
 
   handlers:
     - name: Install GraphicsMagick 
