@@ -1,0 +1,61 @@
+---
+- name: Install Rocket-Chat Server
+  hosts: rocket-chat
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Configure MongoDB repo 
+      raw: echo -e "[mongodb-org-3.6]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/3.6/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc" > /etc/yum.repos.d/mongodb-org-3.6.repo
+    - name: Configure Node.js repo 
+      shell: curl -sL https://rpm.nodesource.com/setup_8.x | bash - warn=False
+    - name: Install build tools, MongoDB, nodejs and graphicsmagick
+      action: yum name={{item}} state=installed 
+      with_items:
+        - gcc-c++
+        - make
+        - mongodb-org
+        - nodejs
+    - name: Configure epel repo
+      action: yum name=epel-release state=installed 
+      notify: Install GraphicsMagick
+    - name: Using npm install inherits and n 
+      action: npm global=True name={{item}} state=present
+      with_items:
+        - inherits 
+        - n
+      notify: Install node version required by Rocket.Chat  
+    - name: Download latest Rocket.Chat version
+      shell: curl -L https://releases.rocket.chat/latest/download -o /tmp/rocket.chat.tgz warn=False
+    - name: Become "vagrant" user then unpack Rocket.Chat
+      become: vagrant
+      action: unarchive src=/tmp/rocket.chat.tgz dest=/tmp remote_src=yes
+      tags:
+        - check-become-vagrant      
+    - name: Change into Rocket.Chat source and become "vagrant" user
+      shell: cd /tmp/bundle/programs/server
+      tags:
+        - check-change-directory
+    - name: Become "vagrant" user and Install Rocket.Chat 
+      become: vagrant
+      shell: npm install
+      tags:
+        - check-install-ok
+      become: yes
+    - name: Move Rocket.Chat from /tmp to /opt
+      shell: mv /tmp/bundle /opt/Rocket.Chat
+    - name: Add user rocketchat, do not create home directory and lock the account
+      user: name=rocketchat create_home=no password_lock=yes
+    - name: Set ownership of /opt/Rocket.Chat
+      file: path=/opt/Rocket.Chat owner=rocketchat group=rocketchat recurse=yes
+    - name: Create Rocket.Chat service file
+      copy: src=./rocketchat.service dest=/usr/lib/systemd/system/rocketchat.service
+    - name: Start and Enable MongoDB
+      systemd: name=mongod state=started enabled=yes
+    - name: Start and Enable Rocket.Chat
+      systemd: name=rocketchat state=started enabled=yes
+  handlers:
+    - name: Install GraphicsMagick 
+      action: yum pkg=GraphicsMagick state=installed
+    - name: Install node version required by Rocket.Chat
+      command: n 8.11.3
