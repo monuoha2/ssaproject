@@ -1,0 +1,33 @@
+--- # CICD Pipline Project
+- name: Configure Jenkins Server
+  hosts: jenkins 
+  gather_facts: no
+  become: yes
+
+  # -- you don't need to specify a user because when using ansible with vagrant it will connect with the user named "vagrant" by default. 
+  #You could however override this. Same thing goes for the "connection" option, ssh is used by default.
+  #user: vagrant
+  #connection: ssh
+
+  tasks:
+    - name: Install Epel Repo
+      action: yum name=epel-release state=installed
+
+    - name: Download and Install Jenkins Repo
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Download and install Jenkins Repo Key
+      rpm_key: 
+        state: present
+        key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+    - name: Install Java 1.8.0 JDK
+      action: yum name=java-1.8.0-openjdk state=installed
+
+    - name: Install Jenkins Server
+      action: yum name=jenkins state=installed
+
+    - name: Start and Enable Jenkins
+      action: systemd name=jenkins state=started enabled=yes
