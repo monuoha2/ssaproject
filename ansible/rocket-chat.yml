@@ -1,0 +1,42 @@
+---
+- name: Install Rocket-Chat Server
+  hosts: rocket-chat
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Configure MongoDB repo 
+      raw: echo -e "[mongodb-org-3.6]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/3.6/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc" > /etc/yum.repos.d/mongodb-org-3.6.repo
+    - name: Configure Node.js repo 
+      shell: curl -sL https://rpm.nodesource.com/setup_8.x | bash - warn=False
+    - name: Install build tools, MongoDB, nodejs and graphicsmagick
+      action: yum name={{item}} state=installed 
+      with_items:
+        - gcc-c++
+        - make
+        - mongodb-org
+        - nodejs
+    - name: Configure epel repo
+      action: yum name=epel-release state=installed 
+      notify: Install GraphicsMagick
+    - name: Using npm install inherits and n 
+      action: npm global=True name={{item}} state=present
+      with_items:
+        - inherits 
+        - n
+      notify: Install node version required by Rocket.Chat  
+    - name: Download latest Rocket.Chat version
+      shell: curl -L https://releases.rocket.chat/latest/download -o /tmp/rocket.chat.tgz warn=False
+    - name: Unpack Rocket.Chat
+      action: unarchive src=/tmp/rocket.chat.tgz dest=/tmp remote_src=yes
+    - name: Install Rocket.Chat
+      shell: cd /tmp/bundle/programs/server && npm install
+    - name: Move Rocket.Chat from /tmp to /opt
+      shell: mv /tmp/bundle /opt/Rocket.Chat
+    - name: Add user rocketchat, do not create home directory and lock the account
+      user: name=rocketchat create_home=no password_lock=yes
+  handlers:
+    - name: Install GraphicsMagick 
+      action: yum pkg=GraphicsMagick state=installed
+    - name: Install node version required by Rocket.Chat
+      command: n 8.11.3

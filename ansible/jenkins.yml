@@ -1,11 +1,14 @@
 --- # CICD Pipline Project
-- name: Configure Jenkins Servers 
+- name: Configure Jenkins Server
   hosts: jenkins 
   gather_facts: no
   become: yes
-  # -- you don't need to specify a user because when using ansible with vagrant it will connect with the user named "vagrant" by default. You could however override this. Same thing goes for the "connection" option, ssh is used by default.
+
+  # -- you don't need to specify a user because when using ansible with vagrant it will connect with the user named "vagrant" by default. 
+  #You could however override this. Same thing goes for the "connection" option, ssh is used by default.
   #user: vagrant
   #connection: ssh
+
   tasks:
     - name: Install Epel Repo
       action: yum name=epel-release state=installed
