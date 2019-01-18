@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
 		myrocket.vm.network "private_network",ip:"1.2.3.5"
 		myrocket.vm.provision "ansible" do |ansible|
 			ansible.playbook = "ansible/rocket-chat.yml"
-			#ansible.tags = "create-rocket-chat-user"
+			ansible.tags = "check-become-vagrant,check-install-ok,check-change-directory"
 		end
 	end
 	config.vm.define "gitlab" do |gitlab_server|
