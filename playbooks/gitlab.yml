@@ -1,0 +1,20 @@
+---
+- name: Configure GitLab Server
+  hosts: gitlab
+  gather_facts: no
+  become: yes
+
+  tasks:
+
+  - name: Install tools for host management and troubleshooting 
+    yum: name={{item}} state=installed
+    with_items: [vim-enhanced,telnet]
+
+  - name: Add GitLab repo to list of accessible repositories
+    shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash warn=false
+
+  - name: Set EXTERNAL_URL environment variable
+    shell: export EXTERNAL_URL="emwg-gitlab"
+
+  - name: Install GitLab
+    action: yum name="gitlab-ee" state=installed
