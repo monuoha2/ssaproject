@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
 		rocket.vm.box = "bento/centos-7.6"
 		rocket.vm.hostname = "rocket-chat.lunarblush.local"
 		rocket.vm.network "private_network",ip:"1.2.3.5"
+      rocket.vm.network "forwarded_port",guest:3000,host:80
 		rocket.vm.provision "ansible" do |ansible|
 			ansible.playbook = "playbooks/rocket-chat.yml"
 			#ansible.tags = "execute"

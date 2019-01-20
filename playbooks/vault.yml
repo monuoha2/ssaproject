@@ -5,6 +5,9 @@
   gather_facts: no
 
   tasks:
+    - name: Install unzip 
+      yum: name=unzip state=installed
+
     - name: Download and unzip Vault package from HashiCorp directly into /usr/bin
       unarchive:
         src: https://releases.hashicorp.com/vault/1.0.2/vault_1.0.2_linux_amd64.zip

@@ -1,0 +1,12 @@
+--- # Run this against all your AWS AMI-2 hosts to make sure basic tools are installed
+- name: "Configure AWS AMI-2 Server with basic tools"
+  hosts: '{{ host }}'
+  gather_facts: no
+  become: yes
+  remote_user: "ec2-user"
+
+  tasks:
+
+  - name: Install install vim, telnet, man-pages, python3, git etc. 
+    yum: name={{item}} state=installed
+    with_items: [vim-enhanced,telnet,man-pages,python3,git]

@@ -5,6 +5,10 @@
   gather_facts: no
 
   tasks:
+    - name: Install telnet
+      yum: name={{ item }} state=installed
+      with_items: ["telnet","vim-enhanced","man-pages"]
+      
     - name: Configure MongoDB repo 
       raw: echo -e "[mongodb-org-3.6]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/3.6/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc" > /etc/yum.repos.d/mongodb-org-3.6.repo
 
@@ -47,6 +51,9 @@
       become: vagrant
       command: npm install
 
+    - name: Delete /opt/Rocket.Chat diredtory
+      file: state=absent path=/opt/Rocket.Chat
+
     - name: Move Rocket.Chat from /tmp to /opt
       shell: mv /tmp/bundle /opt/Rocket.Chat
 
@@ -57,14 +64,14 @@
       file: path=/opt/Rocket.Chat owner=rocketchat group=rocketchat recurse=yes
 
     - name: Create Rocket.Chat service file and call handler to reload systemd daemon
-      shell: echo -e "[Unit]\nDescription=The Rocket.Chat server\nAfter=network.target remote-fs.target nss-lookup.target nginx.target mongod.target\n[Service]\nExecStart=/usr/local/bin/node /opt/Rocket.Chat/main.js\nStandardOutput=syslog\nStandardError=syslog\nSyslogIdentifier=rocketchat\nUser=rocketchat\nEnvironment=LD_PRELOAD=/opt/Rocket.Chat/programs/server/npm/node_modules/sharp/vendor/lib/libz.so NODE_ENV=production MONGO_URL=mongodb://localhost:27017/rocketchat ROOT_URL=http://rocket-chat.lunarblush.com:3000/ PORT=3000\n[Install]\nWantedBy=multi-user.target" > /usr/lib/systemd/system/rocketchat.service
+      shell: echo -e "[Unit]\nDescription=The Rocket.Chat server\nAfter=network.target remote-fs.target nss-lookup.target nginx.target mongod.target\n[Service]\nExecStart=/usr/local/bin/node /opt/Rocket.Chat/main.js\nStandardOutput=syslog\nStandardError=syslog\nSyslogIdentifier=rocketchat\nUser=rocketchat\nEnvironment=LD_PRELOAD=/opt/Rocket.Chat/programs/server/npm/node_modules/sharp/vendor/lib/libz.so NODE_ENV=production MONGO_URL=mongodb://localhost:27017/rocketchat ROOT_URL=http://rocket-chat.lunarblush.local:3000/ PORT=3000\n[Install]\nWantedBy=multi-user.target" > /usr/lib/systemd/system/rocketchat.service
       notify: reload systemd daemon
 
     - name: Start and Enable MongoDB
       systemd: name=mongod state=started enabled=yes
 
     - name: Start and Enable Rocket.Chat
-      systemd: name=rocketchat state=started enabled=yes
+      systemd: name=rocketchat state=restarted enabled=yes
 
   handlers:
     - name: Install GraphicsMagick 
