@@ -1,12 +1,20 @@
 --- # Run this against all your AWS AMI-2 hosts to make sure basic tools are installed
+
+###############################################################################################
+#
+# Use the line below on the command to specify a particular host to run against
+#
+#        ansible-playbook --list-hosts -i aws-hosts --extra-vars "host=jenkins" aws-setup.yml
+#
+###############################################################################################
+
 - name: "Configure AWS AMI-2 Server with basic tools"
-  hosts: '{{ host }}'
+  hosts: '{{ hosts }}'
   gather_facts: no
   become: yes
-  remote_user: "ec2-user"
 
   tasks:
 
   - name: Install install vim, telnet, man-pages, python3, git etc. 
     yum: name={{item}} state=installed
-    with_items: [vim-enhanced,telnet,man-pages,python3,git]
+    with_items: [vim-enhanced,telnet,man-pages,epel-release,git]
