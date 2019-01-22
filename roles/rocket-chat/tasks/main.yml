@@ -40,7 +40,7 @@
   become: vagrant
   command: npm install
 
-- name: Delete /opt/Rocket.Chat diredtory
+- name: Delete /opt/Rocket.Chat directory
   file: state=absent path=/opt/Rocket.Chat
 
 - name: Move Rocket.Chat from /tmp to /opt
@@ -53,7 +53,7 @@
   file: path=/opt/Rocket.Chat owner=rocketchat group=rocketchat recurse=yes
 
 - name: Create Rocket.Chat service file and call handler to reload systemd daemon
-  shell: echo -e "[Unit]\nDescription=The Rocket.Chat server\nAfter=network.target remote-fs.target nss-lookup.target nginx.target mongod.target\n[Service]\nExecStart=/usr/local/bin/node /opt/Rocket.Chat/main.js\nStandardOutput=syslog\nStandardError=syslog\nSyslogIdentifier=rocketchat\nUser=rocketchat\nEnvironment=LD_PRELOAD=/opt/Rocket.Chat/programs/server/npm/node_modules/sharp/vendor/lib/libz.so NODE_ENV=production MONGO_URL=mongodb://localhost:27017/rocketchat ROOT_URL=http://rocket-chat.lunarblush.local:3000/ PORT=3000\n[Install]\nWantedBy=multi-user.target" > /usr/lib/systemd/system/rocketchat.service
+  shell: echo -e "[Unit]\nDescription=The Rocket.Chat server\nAfter=network.target remote-fs.target nss-lookup.target nginx.target mongod.target\n[Service]\nExecStart=/usr/local/bin/node /opt/Rocket.Chat/main.js\nStandardOutput=syslog\nStandardError=syslog\nSyslogIdentifier=rocketchat\nUser=rocketchat\nEnvironment=LD_PRELOAD=/opt/Rocket.Chat/programs/server/npm/node_modules/sharp/vendor/lib/libz.so NODE_ENV=production MONGO_URL=mongodb://localhost:27017/rocketchat ROOT_URL=http://1.2.3.5:3000/ PORT=3000\n[Install]\nWantedBy=multi-user.target" > /usr/lib/systemd/system/rocketchat.service
   notify: reload systemd daemon
 
 - name: Start and Enable MongoDB

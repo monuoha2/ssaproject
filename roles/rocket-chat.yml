@@ -1,6 +1,6 @@
 ---
 - name: Configure Rocket-Chat Server
-  hosts: rocket-chat
+  hosts: rocket
   become: yes
   gather_facts: no
 

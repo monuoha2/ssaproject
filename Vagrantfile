@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
 			#ansible.tags = "execute"
 		end
 	end
-	config.vm.define "rocket-chat" do |rocket|
+	config.vm.define "rocket" do |rocket|
 		rocket.vm.box = "bento/centos-7.6"
 		rocket.vm.hostname = "rocket-server.local"
 		rocket.vm.network "private_network",ip:"1.2.3.5"
