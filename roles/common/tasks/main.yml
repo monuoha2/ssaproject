@@ -1,0 +1,7 @@
+- name: Install common tools used by all servers 
+  yum: name={{ item }} state=installed
+  with_items:
+    - telnet
+    - vim-enhanced
+    - man-pages
+    - lsof
