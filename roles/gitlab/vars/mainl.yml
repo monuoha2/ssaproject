@@ -1,0 +1,5 @@
+vars_prompt:
+  - name: external_url
+    prompt: "Enter an external URL:\n(The url you will use to access your GitLab installation - IP Addresses are OK)\n"
+    default: "http://1.2.3.6"
+    private: no
