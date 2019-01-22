@@ -1,4 +1,4 @@
---- # CICD Pipline Project
+--- # Master Playbook for Jenkins Server Setup 
 - name: Configure Jenkins Server
   hosts: jenkins 
   gather_facts: no
@@ -9,25 +9,5 @@
   #user: vagrant
   #connection: ssh
 
-  tasks:
-    - name: Install Epel Repo
-      action: yum name=epel-release state=installed
-
-    - name: Download and Install Jenkins Repo
-      get_url:
-        url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
-        dest: /etc/yum.repos.d/jenkins.repo
-
-    - name: Download and install Jenkins Repo Key
-      rpm_key: 
-        state: present
-        key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
-
-    - name: Install Java 1.8.0 JDK
-      action: yum name=java-1.8.0-openjdk state=installed
-
-    - name: Install Jenkins Server
-      action: yum name=jenkins state=installed
-
-    - name: Start and Enable Jenkins
-      action: systemd name=jenkins state=restarted enabled=yes
+  roles:
+    - jenkins

@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
 		jenkins.vm.hostname = "jenkins.lunarblush.local"
 		jenkins.vm.network "private_network",ip:"1.2.3.4"
 		jenkins.vm.provision "ansible" do |ansible|
-			ansible.playbook = "playbooks/jenkins.yml"
+			ansible.playbook = "roles/jenkins.yml"
 			#ansible.tags = "execute"
 		end
 	end
