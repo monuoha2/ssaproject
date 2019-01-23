@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
 		gitlab.vm.network "private_network",ip:"1.2.3.6"
 		gitlab.vm.provision "ansible" do |ansible|
 			ansible.playbook = "roles/gitlab.yml"
+			#ansible.tags = "execute"
 		end
 		gitlab.vm.provider "virtualbox" do |v|
 			v.cpus = 2
@@ -33,6 +34,7 @@ Vagrant.configure("2") do |config|
 		vault.vm.network "private_network",ip:"1.2.3.7"
 		vault.vm.provision "ansible" do |ansible|
 			ansible.playbook = "roles/vault.yml"
+			#ansible.tags = "execute"
 		end
 	end
 end
