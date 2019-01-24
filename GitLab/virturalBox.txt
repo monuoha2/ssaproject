@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo " Installing VirturalBox for RHEL/CentOS7"
+
+cd ~/etc/yum.repos.d/
+
+wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
+
+echo "Updating the Repos!!"
+
+yum update -y
+yum install binutils qt gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms
+
+yum install VirtualBox-6.0
+
+/usr/lib/virtualbox/vboxdrv.sh setup
