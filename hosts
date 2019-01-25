@@ -1,2 +1,11 @@
 [local]
 localhost
+
+[jenkins]
+192.150.25.5
+
+[gitlab]
+192.150.25.6
+
+[rocket]
+192.150.25.7

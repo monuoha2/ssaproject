@@ -1,13 +1,23 @@
 ---
-- name: Install Jenkins, Rocketchat, Terraform, Hashicorp Vault, GitLab, Chef Inspec
-  hosts: all
+- name: Install Jenkins Server
+  hosts: jenkins
   become: yes
-  
 
   roles: 
      - jenkins
-     - RocketChat.Server
-     - terraform
-     - vault
-     - gitlab
      - inspec
+     - terraform
+
+- name: Install GitLab Server
+  hosts: gitlab
+  become: yes
+
+  roles:
+     - gitlab
+
+- name: Install Rocket-Chat Server
+  hosts: rocket
+  become: yes
+
+  roles:
+    - RocketChat.Server
