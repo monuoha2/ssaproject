@@ -1,0 +1,17 @@
+# The task file for installing gitlab
+--- 
+- name: Install GitLab dependencies
+  package: name={{ item }} state=present
+  with_items:
+    -openssh-server
+    -postfix
+    -curl
+    -policycoreutils-python    
+
+- name: Add the  GitLab package repository
+  shell: curl https://packages.gitlab.com/install/repositiories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+
+- name: Install GitLab
+  yum:
+   name: gitlab-ee
+   state: present
