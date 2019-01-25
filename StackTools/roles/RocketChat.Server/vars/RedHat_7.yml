@@ -1,0 +1,7 @@
+---
+rocket_chat_service_update_command: systemctl daemon-reload
+rocket_chat_service_template:
+  src: rocketchat.service.j2
+  dest: /usr/lib/systemd/system/rocketchat.service
+rocket_chat_tarball_validate_remote_cert: false
+rocket_chat_unpack_latest_tarball: tar zxvf /var/lib/rocket.chat/rocket.chat-latest.tgz
