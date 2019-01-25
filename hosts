@@ -9,3 +9,6 @@ localhost
 
 [rocket]
 192.150.25.7
+
+[vault]
+192.150.25.8

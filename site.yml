@@ -21,3 +21,10 @@
 
   roles:
     - RocketChat.Server
+
+- name: Install Vault Server
+  hosts: vault
+  become: yes
+
+  roles:
+    - vault
